@@ -8,6 +8,8 @@ Notable changes between versions.
   * On Container Linux, fetch using the docker transport format ([#659](https://github.com/poseidon/typhoon/pull/659))
 * Update CoreDNS from v1.6.6 to v1.6.7 ([#648](https://github.com/poseidon/typhoon/pull/648))
 * Update Calico from v3.12.0 to [v3.13.1](https://docs.projectcalico.org/v3.13/release-notes/)
+* Add support for Fedora CoreOS snippets (`terraform-provider-ct` v0.5+) ([#686](https://github.com/poseidon/typhoon/pull/686))
+* Recommend updating `terraform-provider-ct` plugin from v0.4.0 to [v0.5.0](https://github.com/poseidon/terraform-provider-ct/releases/tag/v0.5.0)
 
 #### AWS
 
