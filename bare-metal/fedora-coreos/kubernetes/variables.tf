@@ -80,6 +80,12 @@ variable "k8s_domain_name" {
   description = "Controller DNS name which resolves to a controller instance. Workers and kubeconfig's will communicate with this endpoint (e.g. cluster.example.com)"
 }
 
+variable "ssh_private_key" {
+  type        = string
+  description = "SSH private key for user 'core'"
+  default     = ""
+}
+
 variable "ssh_authorized_key" {
   type        = string
   description = "SSH public key for user 'core'"
