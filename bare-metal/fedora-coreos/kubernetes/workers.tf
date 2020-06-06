@@ -21,6 +21,7 @@ module "workers" {
   node_labels        = lookup(var.worker_node_labels, var.workers[count.index].name, [])
   node_taints        = lookup(var.worker_node_taints, var.workers[count.index].name, [])
   snippets           = lookup(var.snippets, var.workers[count.index].name, [])
+  ssh_private_key    = var.ssh_private_key
 
   # optional
   cached_install = var.cached_install

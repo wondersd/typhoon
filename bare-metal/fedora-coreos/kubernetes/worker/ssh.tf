@@ -7,10 +7,11 @@ resource "null_resource" "copy-worker-secrets" {
   ]
 
   connection {
-    type    = "ssh"
-    host    = var.domain
-    user    = "core"
-    timeout = "60m"
+    type        = "ssh"
+    host        = var.domain
+    user        = "core"
+    timeout     = "60m"
+    private_key = var.ssh_private_key
   }
 
   provisioner "file" {

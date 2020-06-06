@@ -19,10 +19,11 @@ resource "null_resource" "copy-controller-secrets" {
   ]
 
   connection {
-    type    = "ssh"
-    host    = var.controllers.*.domain[count.index]
-    user    = "core"
-    timeout = "60m"
+    type        = "ssh"
+    host        = var.controllers.*.domain[count.index]
+    user        = "core"
+    timeout     = "60m"
+    private_key = var.ssh_private_key
   }
 
   provisioner "file" {
@@ -54,10 +55,11 @@ resource "null_resource" "bootstrap" {
   ]
 
   connection {
-    type    = "ssh"
-    host    = var.controllers[0].domain
-    user    = "core"
-    timeout = "15m"
+    type        = "ssh"
+    host        = var.controllers[0].domain
+    user        = "core"
+    timeout     = "15m"
+    private_key = var.ssh_private_key
   }
 
   provisioner "remote-exec" {

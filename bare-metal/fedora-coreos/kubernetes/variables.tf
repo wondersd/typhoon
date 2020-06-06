@@ -87,6 +87,13 @@ variable "k8s_alt_domain_names" {
   description = "Alternative Controller DNS names which resolve to a controller instance(s)"
 }
 
+variable "ssh_private_key" {
+  type        = string
+  description = "SSH private key to use when connecting as 'core' to bootstrap, defaults to current users private key."
+  default     = null
+  sensitive   = true
+}
+
 variable "ssh_authorized_key" {
   type        = string
   description = "SSH public key for user 'core'"
