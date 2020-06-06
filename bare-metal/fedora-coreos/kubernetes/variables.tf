@@ -133,6 +133,12 @@ variable "cached_install" {
   default     = false
 }
 
+variable "live" {
+  type        = bool
+  description = "Whether Fedora CoreOS should PXE boot live. Respects cached_install for whether assets have been cached."
+  default     = false
+}
+
 variable "install_disk" {
   type        = string
   description = "Disk device to install Fedora CoreOS (e.g. sda)"
