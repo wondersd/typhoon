@@ -25,9 +25,19 @@ locals {
     "console=ttyS0",
   ]
 
+  live_args = [
+    "rd.neednet=1",
+    "initrd=fedora-coreos-${var.os_version}-live-initramfs.x86_64.img",
+    "console=tty0",
+    "console=ttyS0",
+    "ignition.firstboot",
+    "ignition.platform.id=metal",
+    "ignition.config.url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}"
+  ]
+
   kernel = var.cached_install ? local.cached_kernel : local.remote_kernel
   initrd = var.cached_install ? local.cached_initrd : local.remote_initrd
-  args   = var.cached_install ? local.cached_args : local.remote_args
+  args   = var.live ? local.live_args : (var.cached_install ? local.cached_args : local.remote_args)
 }
 
 
