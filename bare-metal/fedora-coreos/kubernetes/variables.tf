@@ -62,6 +62,35 @@ EOD
   default     = []
 }
 
+variable "controllers_arch_override" {
+  type        = map(string)
+  default     = {}
+  description = "override architecture per controller"
+}
+
+variable "controllers_version_override" {
+  type        = map(string)
+  default     = {}
+  description = "override architecture per controller"
+}
+
+variable "workers_arch_override" {
+  type        = map(string)
+  default     = {}
+  description = "override architecture per worker"
+}
+
+variable "workers_version_override" {
+  type        = map(string)
+  default     = {}
+  description = "override architecture per worker"
+}
+
+variable "live" {
+  type    = bool
+  default = false
+}
+
 variable "snippets" {
   type        = map(list(string))
   description = "Map from machine names to lists of Butane snippets"

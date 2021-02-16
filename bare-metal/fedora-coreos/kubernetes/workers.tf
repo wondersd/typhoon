@@ -7,8 +7,8 @@ module "workers" {
   # metal
   matchbox_http_endpoint = var.matchbox_http_endpoint
   os_stream              = var.os_stream
-  os_version             = var.os_version
-  os_arch                = var.os_arch
+  os_version             = lookup(var.workers_version_override, element(var.workers, count.index).name, var.os_version)
+  os_arch                = lookup(var.workers_arch_override, element(var.workers, count.index).name, var.os_arch)
 
   # machine
   name   = var.workers[count.index].name

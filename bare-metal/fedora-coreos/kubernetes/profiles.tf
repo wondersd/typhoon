@@ -44,9 +44,85 @@ resource "matchbox_profile" "controllers" {
   count = length(var.controllers)
   name  = format("%s-controller-%s", var.cluster_name, var.controllers.*.name[count.index])
 
-  kernel = local.kernel
-  initrd = local.initrd
-  args   = concat(local.args, var.kernel_args)
+  kernel = (
+    var.cached_install
+    ? format(
+      "/assets/fedora-coreos/fedora-coreos-%v-live-kernel-%v",
+      lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+      lookup(var.controllers_arch_override, element(var.controllers, count.index).name, var.os_arch)
+    )
+    : format(
+      "https://builds.coreos.fedoraproject.org/prod/streams/%v/builds/%v/%v/fedora-coreos-%v-live-kernel-%v",
+      var.os_stream,
+      lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+      lookup(var.controllers_arch_override, element(var.controllers, count.index).name, var.os_arch),
+      lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+      lookup(var.controllers_arch_override, element(var.controllers, count.index).name, var.os_arch)
+    )
+  )
+  initrd = (
+    var.cached_install
+    ? [
+      format(
+        "/assets/fedora-coreos/fedora-coreos-%v-live-initramfs.%v.img",
+        lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+        lookup(var.controllers_arch_override, element(var.controllers, count.index).name, var.os_arch)
+      )
+    ]
+    : [
+      format(
+        "--name main https://builds.coreos.fedoraproject.org/prod/streams/%v/builds/%v/%v/fedora-coreos-%v-live-initramfs.%v.img",
+        var.os_stream,
+        lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+        lookup(var.controllers_arch_override, element(var.controllers, count.index).name, var.os_arch),
+        lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+        lookup(var.controllers_arch_override, element(var.controllers, count.index).name, var.os_arch)
+      )
+    ]
+  )
+  args = concat(
+    (
+      var.live
+      ? [
+        "rd.neednet=1",
+        format(
+          "initrd=fedora-coreos-%v-live-initramfs.%v.img",
+          lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+          lookup(var.controllers_arch_override, element(var.controllers, count.index).name, var.os_arch)
+        ),
+        "console=tty0",
+        "console=ttyS0",
+        "ignition.firstboot",
+        "ignition.platform.id=metal",
+        "ignition.config.url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}"
+      ]
+      : (
+        var.cached_install
+        ? [
+          "initrd=main",
+          format(
+            "coreos.live.rootfs_url=${var.matchbox_http_endpoint}/assets/fedora-coreos/fedora-coreos-%v-live-rootfs.%v.img",
+            lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+            lookup(var.controllers_arch_override, element(var.controllers, count.index).name, var.os_arch)
+          ),
+          "coreos.inst.install_dev=${var.install_disk}",
+          "coreos.inst.ignition_url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}",
+        ]
+        : [
+          "initrd=main",
+          format(
+            "coreos.live.rootfs_url=https://builds.coreos.fedoraproject.org/prod/streams/%v/builds/%v/%v/fedora-coreos-%v-live-rootfs.%v.img",
+            var.os_stream,
+            lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+            lookup(var.controllers_arch_override, element(var.controllers, count.index).name, var.os_arch),
+            lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+            lookup(var.controllers_arch_override, element(var.controllers, count.index).name, var.os_arch)
+          )
+        ]
+      )
+    ),
+    var.kernel_args
+  )
 
   raw_ignition = data.ct_config.controllers.*.rendered[count.index]
 }
