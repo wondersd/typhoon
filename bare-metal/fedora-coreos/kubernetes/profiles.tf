@@ -52,9 +52,67 @@ resource "matchbox_profile" "controllers" {
   count = length(var.controllers)
   name  = format("%s-controller-%s", var.cluster_name, var.controllers.*.name[count.index])
 
-  kernel = local.kernel
-  initrd = local.initrd
-  args = concat(local.args, var.kernel_args)
+  kernel = (
+    var.cached_install
+    ? format(
+      "/assets/fedora-coreos/fedora-coreos-%v-live-kernel-%v",
+      lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+      lookup(var.controllers_arch_override, element(var.controllers, count.index).name, "x86_64")
+    )
+    : local.remote_kernel
+  )
+  initrd = (
+    var.cached_install
+    ? [
+        format(
+          "/assets/fedora-coreos/fedora-coreos-%v-live-initramfs.%v.img",
+          lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+          lookup(var.controllers_arch_override, element(var.controllers, count.index).name, "x86_64")
+        ),
+        format(
+          "/assets/fedora-coreos/fedora-coreos-%v-live-rootfs.%v.img",
+          lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+          lookup(var.controllers_arch_override, element(var.controllers, count.index).name, "x86_64")
+        )
+      ]
+    : local.remote_initrd
+  )
+  args = concat(
+    (
+      var.live
+      ? [
+          "rd.neednet=1",
+          format(
+            "initrd=fedora-coreos-%v-live-initramfs.%v.img",
+            lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+            lookup(var.controllers_arch_override, element(var.controllers, count.index).name, "x86_64")
+          ),
+          "console=tty0",
+          "console=ttyS0",
+          "ignition.firstboot",
+          "ignition.platform.id=metal",
+          "ignition.config.url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}"
+        ]
+      : (
+        var.cached_install 
+        ? [
+            "ip=dhcp",
+            "rd.neednet=1",
+            "coreos.inst.install_dev=${var.install_disk}",
+            "coreos.inst.ignition_url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}",
+            format(
+              "coreos.inst.image_url=${var.matchbox_http_endpoint}/assets/fedora-coreos/fedora-coreos-%v-metal.%v.raw.xz",
+              lookup(var.controllers_version_override, element(var.controllers, count.index).name, var.os_version),
+              lookup(var.controllers_arch_override, element(var.controllers, count.index).name, "x86_64")
+            ),
+            "console=tty0",
+            "console=ttyS0",
+          ]
+        : local.remote_args
+      )
+    ),
+    var.kernel_args
+  )
 
   raw_ignition = data.ct_config.controller-ignitions.*.rendered[count.index]
 }
@@ -86,9 +144,67 @@ resource "matchbox_profile" "workers" {
   count = length(var.workers)
   name  = format("%s-worker-%s", var.cluster_name, var.workers.*.name[count.index])
 
-  kernel = local.kernel
-  initrd = local.initrd
-  args = concat(local.args, var.kernel_args)
+  kernel = (
+    var.cached_install
+    ? format(
+      "/assets/fedora-coreos/fedora-coreos-%v-live-kernel-%v",
+      lookup(var.workers_version_override, element(var.controllers, count.index).name, var.os_version),
+      lookup(var.workers_arch_override, element(var.controllers, count.index).name, "x86_64")
+    )
+    : local.remote_kernel
+  )
+  initrd = (
+    var.cached_install
+    ? [
+        format(
+          "/assets/fedora-coreos/fedora-coreos-%v-live-initramfs.%v.img",
+          lookup(var.workers_version_override, element(var.controllers, count.index).name, var.os_version),
+          lookup(var.workers_arch_override, element(var.controllers, count.index).name, "x86_64")
+        ),
+        format(
+          "/assets/fedora-coreos/fedora-coreos-%v-live-rootfs.%v.img",
+          lookup(var.workers_version_override, element(var.controllers, count.index).name, var.os_version),
+          lookup(var.workers_arch_override, element(var.controllers, count.index).name, "x86_64")
+        )
+      ]
+    : local.remote_initrd
+  )
+  args = concat(
+    (
+      var.live
+      ? [
+          "rd.neednet=1",
+          format(
+            "initrd=fedora-coreos-%v-live-initramfs.%v.img",
+            lookup(var.workers_version_override, element(var.controllers, count.index).name, var.os_version),
+            lookup(var.workers_arch_override, element(var.controllers, count.index).name, "x86_64")
+          ),
+          "console=tty0",
+          "console=ttyS0",
+          "ignition.firstboot",
+          "ignition.platform.id=metal",
+          "ignition.config.url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}"
+        ]
+      : (
+        var.cached_install 
+        ? [
+            "ip=dhcp",
+            "rd.neednet=1",
+            "coreos.inst.install_dev=${var.install_disk}",
+            "coreos.inst.ignition_url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}",
+            format(
+              "coreos.inst.image_url=${var.matchbox_http_endpoint}/assets/fedora-coreos/fedora-coreos-%v-metal.%v.raw.xz",
+              lookup(var.workers_version_override, element(var.controllers, count.index).name, var.os_version),
+              lookup(var.workers_arch_override, element(var.controllers, count.index).name, "x86_64")
+            ),
+            "console=tty0",
+            "console=ttyS0",
+          ]
+        : local.remote_args
+      )
+    ),
+    var.kernel_args
+  )
 
   raw_ignition = data.ct_config.worker-ignitions.*.rendered[count.index]
 }
