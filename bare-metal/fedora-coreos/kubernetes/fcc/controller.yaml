@@ -12,7 +12,11 @@ systemd:
         Wants=network-online.target network.target
         After=network-online.target
         [Service]
+        %{ if arch == "aarch64" }
+        Environment=ETCD_IMAGE=quay.io/coreos/etcd:v3.4.14-arm64
+        %{ else }
         Environment=ETCD_IMAGE=quay.io/coreos/etcd:v3.4.14
+        %{ endif }
         Type=exec
         ExecStartPre=/bin/mkdir -p /var/lib/etcd
         ExecStartPre=-/usr/bin/podman rm etcd
@@ -222,6 +226,9 @@ storage:
           ETCD_PEER_CERT_FILE=/etc/ssl/certs/etcd/peer.crt
           ETCD_PEER_KEY_FILE=/etc/ssl/certs/etcd/peer.key
           ETCD_PEER_CLIENT_CERT_AUTH=true
+          %{ if arch == "aarch64" }
+          ETCD_UNSUPPORTED_ARCH=arm64
+          %{ endif }
 passwd:
   users:
     - name: core

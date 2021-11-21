@@ -136,6 +136,7 @@ data "template_file" "controller-configs" {
     cluster_dns_service_ip = module.bootstrap.cluster_dns_service_ip
     cluster_domain_suffix  = var.cluster_domain_suffix
     ssh_authorized_key     = var.ssh_authorized_key
+    arch                   = lookup(var.controllers_arch_override, var.controllers.*.name[count.index], "x86_64")
   }
 }
 
