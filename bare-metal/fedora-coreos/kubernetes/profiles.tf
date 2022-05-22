@@ -1,24 +1,24 @@
 locals {
-  remote_kernel = "https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/x86_64/fedora-coreos-${var.os_version}-live-kernel.x86_64"
+  remote_kernel = "https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/${var.os_arch}/fedora-coreos-${var.os_version}-live-kernel.${var.os_arch}"
   remote_initrd = [
-    "--name main https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/x86_64/fedora-coreos-${var.os_version}-live-initramfs.x86_64.img",
+    "--name main https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/x86_64/fedora-coreos-${var.os_version}-live-initramfs.${var.os_arch}.img",
   ]
 
   remote_args = [
     "initrd=main",
-    "coreos.live.rootfs_url=https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/x86_64/fedora-coreos-${var.os_version}-live-rootfs.x86_64.img",
+    "coreos.live.rootfs_url=https://builds.coreos.fedoraproject.org/prod/streams/${var.os_stream}/builds/${var.os_version}/x86_64/fedora-coreos-${var.os_version}-live-rootfs.${var.os_arch}.img",
     "coreos.inst.install_dev=${var.install_disk}",
     "coreos.inst.ignition_url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}",
   ]
 
-  cached_kernel = "/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-kernel.x86_64"
+  cached_kernel = "/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-kernel.${var.os_arch}"
   cached_initrd = [
-    "/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-initramfs.x86_64.img",
+    "/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-initramfs.${var.os_arch}.img",
   ]
 
   cached_args = [
     "initrd=main",
-    "coreos.live.rootfs_url=${var.matchbox_http_endpoint}/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-rootfs.x86_64.img",
+    "coreos.live.rootfs_url=${var.matchbox_http_endpoint}/assets/fedora-coreos/fedora-coreos-${var.os_version}-live-rootfs.${var.os_arch}.img",
     "coreos.inst.install_dev=${var.install_disk}",
     "coreos.inst.ignition_url=${var.matchbox_http_endpoint}/ignition?uuid=$${uuid}&mac=$${mac:hexhyp}",
   ]

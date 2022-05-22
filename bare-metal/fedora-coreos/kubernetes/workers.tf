@@ -8,6 +8,7 @@ module "workers" {
   matchbox_http_endpoint = var.matchbox_http_endpoint
   os_stream              = var.os_stream
   os_version             = var.os_version
+  os_arch                = var.os_arch
 
   # machine
   name   = var.workers[count.index].name

@@ -26,6 +26,12 @@ variable "os_version" {
   description = "Fedora CoreOS version to PXE and install (e.g. 31.20200310.3.0)"
 }
 
+variable "os_arch" {
+  type        = string
+  default     = "x86_64"
+  description = "Fedora CoreOS architecture to use, defaults to x86_64, millage may vary on other architectures."
+}
+
 # machine
 
 variable "name" {
