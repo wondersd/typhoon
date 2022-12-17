@@ -80,6 +80,12 @@ variable "k8s_domain_name" {
   description = "Controller DNS name which resolves to a controller instance. Workers and kubeconfig's will communicate with this endpoint (e.g. cluster.example.com)"
 }
 
+variable "k8s_alt_domain_names" {
+  type        = list(string)
+  default     = []
+  description = "Alternative Controller DNS names which resolve to a controller instance(s)"
+}
+
 variable "ssh_authorized_key" {
   type        = string
   description = "SSH public key for user 'core'"
@@ -157,4 +163,3 @@ variable "cluster_domain_suffix" {
   type        = string
   default     = "cluster.local"
 }
-
