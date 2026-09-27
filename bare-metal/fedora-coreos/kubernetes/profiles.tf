@@ -158,6 +158,42 @@ data "ct_config" "controllers" {
     ])
     controller_kubelet_log_driver = lookup(var.controller_kubelet_log_driver, var.controllers[count.index].name, "k8s-file")
     controller_etcd_log_driver    = lookup(var.controller_kubelet_log_driver, var.controllers[count.index].name, "k8s-file")
+    controller_kubelet_volume_mounts = merge(
+      {
+        "/etc/cni/net.d" = {
+          options = "ro,z"
+        }
+        "/etc/kubernetes" = {
+          options = "ro,z"
+        }
+        "/etc/os-release" = {
+          source  = "/usr/lib/os-release"
+          options = "ro"
+        }
+        "/etc/machine-id" = {
+          options = "ro"
+        }
+        "/lib/modules" = {
+          options = "ro"
+        }
+        "/run"                = {}
+        "/sys/fs/cgroup"      = {}
+        "/etc/selinux"        = {}
+        "/sys/fs/selinux"     = {}
+        "/var/lib/containerd" = {}
+        "/var/lib/kubelet" = {
+          options = "rshared,z"
+        }
+        "/var/log" = {}
+        "/var/run/lock" = {
+          options = "z"
+        }
+        "/opt/cni/bin" = {
+          options = "z"
+        },
+      },
+      lookup(var.controller_kubelet_volume_mounts, var.controllers[count.index].name, {})
+    )
   })
   strict   = true
   snippets = lookup(var.snippets, var.controllers.*.name[count.index], [])

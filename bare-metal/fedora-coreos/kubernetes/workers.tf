@@ -26,6 +26,8 @@ module "workers" {
 
   kubelet_log_driver = lookup(var.worker_kubelet_log_driver, var.workers[count.index].name, null)
 
+  kubelet_volume_mounts = lookup(var.worker_kubelet_volume_mounts, var.workers[count.index].name, {})
+
   # optional
   cached_install = var.cached_install
   install_disk   = var.install_disk

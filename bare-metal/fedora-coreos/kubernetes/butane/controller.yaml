@@ -65,20 +65,9 @@ systemd:
           --privileged \
           --pid host \
           --network host \
-          --volume /etc/cni/net.d:/etc/cni/net.d:ro,z \
-          --volume /etc/kubernetes:/etc/kubernetes:ro,z \
-          --volume /usr/lib/os-release:/etc/os-release:ro \
-          --volume /etc/machine-id:/etc/machine-id:ro \
-          --volume /lib/modules:/lib/modules:ro \
-          --volume /run:/run \
-          --volume /sys/fs/cgroup:/sys/fs/cgroup \
-          --volume /etc/selinux:/etc/selinux \
-          --volume /sys/fs/selinux:/sys/fs/selinux \
-          --volume /var/lib/containerd:/var/lib/containerd \
-          --volume /var/lib/kubelet:/var/lib/kubelet:rshared,z \
-          --volume /var/log:/var/log \
-          --volume /var/run/lock:/var/run/lock:z \
-          --volume /opt/cni/bin:/opt/cni/bin:z \
+          %{~ for destination, map in controller_kubelet_volume_mounts ~}
+          --volume %{if contains(keys(map), "source") && map.source != null}${map.source}%{else}${destination}%{endif}:${destination}%{if contains(keys(map), "options") && map.options != null}:${map.options}%{endif} \
+          %{~ endfor ~}
           $${KUBELET_IMAGE} \
           --bootstrap-kubeconfig=/etc/kubernetes/kubeconfig \
           --config=/etc/kubernetes/kubelet.yaml \

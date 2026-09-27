@@ -102,6 +102,15 @@ variable "controller_etcd_log_driver" {
   default = {}
 }
 
+variable "controller_kubelet_volume_mounts" {
+  type = map(map(object({
+    source  = optional(string)
+    options = optional(string)
+  })))
+  description = "map of controller kubelet mounted volumes"
+  default     = {}
+}
+
 variable "workers_arch_override" {
   type        = map(string)
   default     = {}
@@ -117,6 +126,15 @@ variable "workers_version_override" {
 variable "worker_kubelet_log_driver" {
   type    = map(string)
   default = {}
+}
+
+variable "worker_kubelet_volume_mounts" {
+  type = map(map(object({
+    source  = optional(string)
+    options = optional(string)
+  })))
+  description = "map of worker kubelet mounted volumes"
+  default     = {}
 }
 
 variable "live" {

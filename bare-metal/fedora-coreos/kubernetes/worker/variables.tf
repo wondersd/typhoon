@@ -91,6 +91,15 @@ variable "kubelet_log_driver" {
   default = null
 }
 
+variable "kubelet_volume_mounts" {
+  type = map(object({
+    source  = optional(string)
+    options = optional(string)
+  }))
+  description = "kubelet mounted volumes"
+  default     = {}
+}
+
 # optional
 
 variable "cached_install" {

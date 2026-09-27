@@ -59,6 +59,42 @@ data "ct_config" "worker" {
       ? "k8s-file"
       : var.kubelet_log_driver
     )
+    kubelet_volume_mounts = merge(
+      {
+        "/etc/cni/net.d" = {
+          options = "ro,z"
+        }
+        "/etc/kubernetes" = {
+          options = "ro,z"
+        }
+        "/etc/os-release" = {
+          source  = "/usr/lib/os-release"
+          options = "ro"
+        }
+        "/etc/machine-id" = {
+          options = "ro"
+        }
+        "/lib/modules" = {
+          options = "ro"
+        }
+        "/run"                = {}
+        "/sys/fs/cgroup"      = {}
+        "/etc/selinux"        = {}
+        "/sys/fs/selinux"     = {}
+        "/var/lib/containerd" = {}
+        "/var/lib/kubelet" = {
+          options = "rshared,z"
+        }
+        "/var/log" = {}
+        "/var/run/lock" = {
+          options = "z"
+        }
+        "/opt/cni/bin" = {
+          options = "z"
+        },
+      },
+      var.kubelet_volume_mounts
+    )
   })
   strict   = true
   snippets = var.snippets
