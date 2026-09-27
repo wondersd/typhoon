@@ -156,6 +156,8 @@ data "ct_config" "controllers" {
       ) :
       format("%v=%v", key, value)
     ])
+    controller_kubelet_log_driver = lookup(var.controller_kubelet_log_driver, var.controllers[count.index].name, "k8s-file")
+    controller_etcd_log_driver    = lookup(var.controller_kubelet_log_driver, var.controllers[count.index].name, "k8s-file")
   })
   strict   = true
   snippets = lookup(var.snippets, var.controllers.*.name[count.index], [])

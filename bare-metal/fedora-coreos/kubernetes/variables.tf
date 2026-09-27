@@ -92,6 +92,16 @@ variable "controller_system_reserved" {
   default     = {}
 }
 
+variable "controller_kubelet_log_driver" {
+  type    = map(string)
+  default = {}
+}
+
+variable "controller_etcd_log_driver" {
+  type    = map(string)
+  default = {}
+}
+
 variable "workers_arch_override" {
   type        = map(string)
   default     = {}
@@ -102,6 +112,11 @@ variable "workers_version_override" {
   type        = map(string)
   default     = {}
   description = "override architecture per worker"
+}
+
+variable "worker_kubelet_log_driver" {
+  type    = map(string)
+  default = {}
 }
 
 variable "live" {

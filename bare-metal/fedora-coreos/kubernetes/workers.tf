@@ -24,6 +24,8 @@ module "workers" {
   snippets           = lookup(var.snippets, var.workers[count.index].name, [])
   ssh_private_key    = var.ssh_private_key
 
+  kubelet_log_driver = lookup(var.worker_kubelet_log_driver, var.workers[count.index].name, null)
+
   # optional
   cached_install = var.cached_install
   install_disk   = var.install_disk

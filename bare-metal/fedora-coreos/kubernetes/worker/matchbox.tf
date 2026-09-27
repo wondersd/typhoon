@@ -55,6 +55,10 @@ data "ct_config" "worker" {
     cluster_dns_service_ip = cidrhost(var.service_cidr, 10)
     node_labels            = join(",", var.node_labels)
     node_taints            = join(",", var.node_taints)
+    kubelet_log_driver = (var.kubelet_log_driver == null
+      ? "k8s-file"
+      : var.kubelet_log_driver
+    )
   })
   strict   = true
   snippets = var.snippets

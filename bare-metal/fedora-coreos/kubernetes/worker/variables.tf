@@ -86,6 +86,11 @@ variable "node_taints" {
   default     = []
 }
 
+variable "kubelet_log_driver" {
+  type    = string
+  default = null
+}
+
 # optional
 
 variable "cached_install" {

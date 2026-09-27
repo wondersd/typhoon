@@ -18,7 +18,7 @@ systemd:
         ExecStartPre=-/usr/bin/podman rm etcd
         ExecStart=/usr/bin/podman run --name etcd \
           --env-file /etc/etcd/etcd.env \
-          --log-driver k8s-file \
+          --log-driver ${controller_etcd_log_driver} \
           --network host \
           --volume /var/lib/etcd:/var/lib/etcd:rw,Z \
           --volume /etc/ssl/etcd:/etc/ssl/certs:ro,Z \
@@ -61,7 +61,7 @@ systemd:
         ExecStartPre=/usr/bin/bash -c "grep 'certificate-authority-data' /etc/kubernetes/kubeconfig | awk '{print $2}' | base64 -d > /etc/kubernetes/ca.crt"
         ExecStartPre=-/usr/bin/podman rm kubelet
         ExecStart=/usr/bin/podman run --name kubelet \
-          --log-driver k8s-file \
+          --log-driver ${controller_kubelet_log_driver} \
           --privileged \
           --pid host \
           --network host \

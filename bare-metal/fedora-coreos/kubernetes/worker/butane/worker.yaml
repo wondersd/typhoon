@@ -33,7 +33,7 @@ systemd:
         ExecStartPre=/usr/bin/bash -c "grep 'certificate-authority-data' /etc/kubernetes/kubeconfig | awk '{print $2}' | base64 -d > /etc/kubernetes/ca.crt"
         ExecStartPre=-/usr/bin/podman rm kubelet
         ExecStart=/usr/bin/podman run --name kubelet \
-          --log-driver k8s-file \
+          --log-driver ${kubelet_log_driver} \
           --privileged \
           --pid host \
           --network host \
