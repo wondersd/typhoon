@@ -84,9 +84,11 @@ systemd:
           --config=/etc/kubernetes/kubelet.yaml \
           --container-runtime-endpoint=unix:///run/containerd/containerd.sock \
           --hostname-override=${domain_name} \
-          --kubeconfig=/var/lib/kubelet/kubeconfig \
           --node-labels=node.kubernetes.io/controller="true" \
-          --register-with-taints=node-role.kubernetes.io/controller=:NoSchedule
+          %{~ for key, effect in node_taints ~}
+          --register-with-taints=${key}=${effect} \
+          %{~ endfor ~}
+          --kubeconfig=/var/lib/kubelet/kubeconfig
         ExecStop=-/usr/bin/podman stop kubelet
         Delegate=yes
         Restart=always

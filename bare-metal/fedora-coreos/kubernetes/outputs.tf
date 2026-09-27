@@ -17,3 +17,10 @@ output "assets_dist" {
   sensitive = true
 }
 
+output "controllers" {
+  value = data.ct_config.controllers
+}
+
+# output "workers" {
+#   value = module.workers.*.workers
+# }

@@ -74,6 +74,12 @@ variable "controllers_version_override" {
   description = "override architecture per controller"
 }
 
+variable "controller_node_taints" {
+  type        = map(map(string))
+  description = "map of initial node taints"
+  default     = {}
+}
+
 variable "workers_arch_override" {
   type        = map(string)
   default     = {}

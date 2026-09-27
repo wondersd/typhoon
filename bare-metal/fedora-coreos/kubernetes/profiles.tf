@@ -136,6 +136,12 @@ data "ct_config" "controllers" {
     etcd_initial_cluster   = join(",", formatlist("%s=https://%s:2380", var.controllers.*.name, var.controllers.*.domain))
     cluster_dns_service_ip = module.bootstrap.cluster_dns_service_ip
     ssh_authorized_key     = var.ssh_authorized_key
+    node_taints = merge(
+      {
+        "node-role.kubernetes.io/controller" = ":NoSchedule"
+      },
+      lookup(var.controller_node_taints, var.controllers[count.index].name, {})
+    )
   })
   strict   = true
   snippets = lookup(var.snippets, var.controllers.*.name[count.index], [])
