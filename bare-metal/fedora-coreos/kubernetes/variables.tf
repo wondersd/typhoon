@@ -80,6 +80,18 @@ variable "controller_node_taints" {
   default     = {}
 }
 
+variable "controller_kube_reserved" {
+  type        = map(map(string))
+  description = "map of controller kube reserved resources"
+  default     = {}
+}
+
+variable "controller_system_reserved" {
+  type        = map(map(string))
+  description = "map of controller system reserved resources"
+  default     = {}
+}
+
 variable "workers_arch_override" {
   type        = map(string)
   default     = {}

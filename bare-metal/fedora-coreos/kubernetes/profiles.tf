@@ -142,6 +142,20 @@ data "ct_config" "controllers" {
       },
       lookup(var.controller_node_taints, var.controllers[count.index].name, {})
     )
+    controller_kube_reserved = join(",", [
+      for key, value in merge(
+        {},
+        lookup(var.controller_kube_reserved, var.controllers[count.index].name, {})
+      ) :
+      format("%v=%v", key, value)
+    ])
+    controller_system_reserved = join(",", [
+      for key, value in merge(
+        {},
+        lookup(var.controller_system_reserved, var.controllers[count.index].name, {})
+      ) :
+      format("%v=%v", key, value)
+    ])
   })
   strict   = true
   snippets = lookup(var.snippets, var.controllers.*.name[count.index], [])

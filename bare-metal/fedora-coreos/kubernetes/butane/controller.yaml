@@ -88,6 +88,12 @@ systemd:
           %{~ for key, effect in node_taints ~}
           --register-with-taints=${key}=${effect} \
           %{~ endfor ~}
+          %{~ if length(controller_kube_reserved) > 0 ~}
+          --kube-reserved=${controller_kube_reserved} \
+          %{~ endif ~}
+          %{~ if length(controller_system_reserved) > 0 ~}
+          --system-reserved=${controller_system_reserved} \
+          %{~ endif ~}
           --kubeconfig=/var/lib/kubelet/kubeconfig
         ExecStop=-/usr/bin/podman stop kubelet
         Delegate=yes
