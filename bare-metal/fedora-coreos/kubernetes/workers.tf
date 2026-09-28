@@ -29,6 +29,7 @@ module "workers" {
   kubelet_volume_mounts = lookup(var.worker_kubelet_volume_mounts, var.workers[count.index].name, {})
 
   kubelet_install_directives = lookup(var.worker_kubelet_install_directives, var.workers[count.index].name, [])
+  kubelet_directives         = lookup(var.worker_kubelet_directives, var.workers[count.index].name, [])
 
   # optional
   cached_install = var.cached_install

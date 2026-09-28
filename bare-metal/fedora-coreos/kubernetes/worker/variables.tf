@@ -105,6 +105,11 @@ variable "kubelet_install_directives" {
   default = []
 }
 
+variable "kubelet_directives" {
+  type    = list(map(string))
+  default = []
+}
+
 # optional
 
 variable "cached_install" {

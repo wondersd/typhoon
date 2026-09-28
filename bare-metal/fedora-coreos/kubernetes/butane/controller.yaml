@@ -88,6 +88,9 @@ systemd:
         Delegate=yes
         Restart=always
         RestartSec=10
+        %{~ for directive in controller_kubelet_directives ~}
+        ${directive.key}=${directive.value}
+        %{~ endfor ~}
         [Install]
         WantedBy=multi-user.target
         %{~ for directive in controller_kubelet_install_directives ~}

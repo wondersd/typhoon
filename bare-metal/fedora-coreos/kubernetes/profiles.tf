@@ -194,7 +194,8 @@ data "ct_config" "controllers" {
       },
       lookup(var.controller_kubelet_volume_mounts, var.controllers[count.index].name, {})
     )
-    controller_kubelet_install_directives = try(var.controller_kubelet_install_directives[var.controllers[count.index].name], {})
+    controller_kubelet_install_directives = lookup(var.controller_kubelet_install_directives, var.controllers[count.index].name, [])
+    controller_kubelet_directives         = lookup(var.controller_kubelet_directives, var.controllers[count.index].name, [])
   })
   strict   = true
   snippets = lookup(var.snippets, var.controllers.*.name[count.index], [])
