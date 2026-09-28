@@ -121,6 +121,11 @@ variable "controller_kubelet_directives" {
   default = {}
 }
 
+variable "controller_extra_files" {
+  type    = map(map(string))
+  default = {}
+}
+
 variable "workers_arch_override" {
   type        = map(string)
   default     = {}
@@ -154,6 +159,11 @@ variable "worker_kubelet_install_directives" {
 
 variable "worker_kubelet_directives" {
   type    = map(list(map(string)))
+  default = {}
+}
+
+variable "worker_extra_files" {
+  type    = map(map(string))
   default = {}
 }
 

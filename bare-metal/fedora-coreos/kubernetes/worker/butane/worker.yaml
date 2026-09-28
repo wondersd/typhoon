@@ -165,6 +165,13 @@ storage:
           runtime_type = "io.containerd.runc.v2"
           [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
           SystemdCgroup = true
+    %{ for path, file in extra_files }
+    - path: ${path}
+      overwrite: true
+      contents:
+        inline: |
+          ${indent(10, file)}
+    %{ endfor }
 passwd:
   users:
     - name: core

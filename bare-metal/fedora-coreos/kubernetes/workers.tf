@@ -30,6 +30,7 @@ module "workers" {
 
   kubelet_install_directives = lookup(var.worker_kubelet_install_directives, var.workers[count.index].name, [])
   kubelet_directives         = lookup(var.worker_kubelet_directives, var.workers[count.index].name, [])
+  extra_files                = lookup(var.worker_extra_files, var.workers[count.index].name, {})
 
   # optional
   cached_install = var.cached_install

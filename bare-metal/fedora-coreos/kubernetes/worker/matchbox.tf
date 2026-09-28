@@ -97,6 +97,7 @@ data "ct_config" "worker" {
     )
     kubelet_install_directives = var.kubelet_install_directives
     kubelet_directives         = var.kubelet_directives
+    extra_files                = var.extra_files
   })
   strict   = true
   snippets = var.snippets

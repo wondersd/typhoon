@@ -110,6 +110,11 @@ variable "kubelet_directives" {
   default = []
 }
 
+variable "extra_files" {
+  type    = map(string)
+  default = {}
+}
+
 # optional
 
 variable "cached_install" {
