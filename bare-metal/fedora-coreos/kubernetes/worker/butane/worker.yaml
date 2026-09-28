@@ -59,6 +59,9 @@ systemd:
         RestartSec=10
         [Install]
         WantedBy=multi-user.target
+        %{~ for directive in kubelet_install_directives ~}
+        ${directive.key}=${directive.value}
+        %{~ endfor ~}
     - name: kubelet.path
       enabled: true
       contents: |

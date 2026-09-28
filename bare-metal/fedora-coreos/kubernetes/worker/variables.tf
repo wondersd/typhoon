@@ -100,6 +100,11 @@ variable "kubelet_volume_mounts" {
   default     = {}
 }
 
+variable "kubelet_install_directives" {
+  type    = list(map(string))
+  default = []
+}
+
 # optional
 
 variable "cached_install" {

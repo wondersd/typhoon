@@ -111,6 +111,11 @@ variable "controller_kubelet_volume_mounts" {
   default     = {}
 }
 
+variable "controller_kubelet_install_directives" {
+  type    = map(list(map(string)))
+  default = {}
+}
+
 variable "workers_arch_override" {
   type        = map(string)
   default     = {}
@@ -135,6 +140,11 @@ variable "worker_kubelet_volume_mounts" {
   })))
   description = "map of worker kubelet mounted volumes"
   default     = {}
+}
+
+variable "worker_kubelet_install_directives" {
+  type    = map(list(map(string)))
+  default = {}
 }
 
 variable "live" {
