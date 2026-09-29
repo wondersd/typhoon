@@ -126,6 +126,11 @@ variable "controller_extra_files" {
   default = {}
 }
 
+variable "controller_etcd_environment" {
+  type    = map(map(string))
+  default = {}
+}
+
 variable "workers_arch_override" {
   type        = map(string)
   default     = {}

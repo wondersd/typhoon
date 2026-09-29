@@ -21,6 +21,10 @@ output "controllers" {
   value = data.ct_config.controllers
 }
 
+output "controllers_config" {
+  value = var.controllers
+}
+
 # output "workers" {
 #   value = module.workers.*.workers
 # }

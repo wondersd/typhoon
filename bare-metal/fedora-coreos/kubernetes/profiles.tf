@@ -158,6 +158,7 @@ data "ct_config" "controllers" {
     ])
     controller_kubelet_log_driver = lookup(var.controller_kubelet_log_driver, var.controllers[count.index].name, "k8s-file")
     controller_etcd_log_driver    = lookup(var.controller_kubelet_log_driver, var.controllers[count.index].name, "k8s-file")
+    controller_etcd_environment   = lookup(var.controller_etcd_environment, var.controllers[count.index].name, {})
     controller_kubelet_volume_mounts = merge(
       {
         "/etc/cni/net.d" = {

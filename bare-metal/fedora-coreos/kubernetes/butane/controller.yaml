@@ -22,6 +22,9 @@ systemd:
           --network host \
           --volume /var/lib/etcd:/var/lib/etcd:rw,Z \
           --volume /etc/ssl/etcd:/etc/ssl/certs:ro,Z \
+          %{~ for key, value in controller_etcd_environment ~}
+          --env "${key}=${value}" \
+          %{~ endfor ~}
           $${ETCD_IMAGE}
         ExecStop=/usr/bin/podman stop etcd
         Restart=on-failure
