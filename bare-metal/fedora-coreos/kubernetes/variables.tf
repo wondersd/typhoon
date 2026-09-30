@@ -208,6 +208,31 @@ variable "k8s_alt_domain_names" {
   description = "Alternative Controller DNS names which resolve to a controller instance(s)"
 }
 
+variable "apiserver_additional_args" {
+  type    = list(string)
+  default = []
+}
+
+variable "apiserver_resources" {
+  type    = any
+  default = {}
+}
+
+variable "apiserver_securitycontext" {
+  type    = any
+  default = {}
+}
+
+variable "controller_manager_resources" {
+  type    = any
+  default = {}
+}
+
+variable "scheduler_resources" {
+  type    = any
+  default = {}
+}
+
 variable "ssh_private_key" {
   type        = string
   description = "SSH private key to use when connecting as 'core' to bootstrap, defaults to current users private key."
