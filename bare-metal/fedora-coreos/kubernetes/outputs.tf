@@ -25,6 +25,10 @@ output "controllers_config" {
   value = var.controllers
 }
 
-# output "workers" {
-#   value = module.workers.*.workers
-# }
+output "workers" {
+  value = module.workers[*].worker
+}
+
+output "workers_config" {
+  value = var.workers
+}
