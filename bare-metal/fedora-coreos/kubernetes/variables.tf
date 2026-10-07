@@ -208,6 +208,11 @@ variable "k8s_alt_domain_names" {
   description = "Alternative Controller DNS names which resolve to a controller instance(s)"
 }
 
+variable "apiserver_annotations" {
+  type    = map(string)
+  default = {}
+}
+
 variable "apiserver_additional_args" {
   type    = list(string)
   default = []
@@ -223,8 +228,18 @@ variable "apiserver_securitycontext" {
   default = {}
 }
 
+variable "controller_manager_annotations" {
+  type    = map(string)
+  default = {}
+}
+
 variable "controller_manager_resources" {
   type    = any
+  default = {}
+}
+
+variable "scheduler_annotations" {
+  type    = map(string)
   default = {}
 }
 
