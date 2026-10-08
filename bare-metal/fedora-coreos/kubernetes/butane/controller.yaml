@@ -190,6 +190,8 @@ storage:
           chmod -R 500 /etc/ssl/etcd
           mv auth/* /etc/kubernetes/pki/
           mv tls/k8s/* /etc/kubernetes/pki/
+          mv /etc/kubernetes/pki/ca.key /etc/kubernetes/pki/cluster-signing.key
+          cp /etc/kubernetes/pki/ca.crt /etc/kubernetes/pki/cluster-signing.crt
           mkdir -p /etc/kubernetes/manifests
           mv static-manifests/* /etc/kubernetes/manifests/
           mkdir -p /opt/bootstrap/assets
